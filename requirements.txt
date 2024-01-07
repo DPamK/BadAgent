@@ -1,0 +1,4 @@
+torchkeras==3.9.5
+transformers==4.36.2
+peft==0.7.1
+datasets==2.16.1
