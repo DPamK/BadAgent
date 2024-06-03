@@ -21,18 +21,18 @@ pip install -r requirements.txt
 
 We utilize the open-source [AgentInstruct dataset](https://huggingface.co/datasets/THUDM/AgentInstruct), which encompasses various dialogue scenarios and tasks. Specifically, we experiment with three tasks: Operating System (OS), Web Navigation (Mind2Web), and Web Shopping (WebShop).
 
-## Base model
+## Base Models
 
 We adopt three state-of-the-art and open-source LLM agent models, as follows:
 
-## Data 
+## Data Poisoning
 
 
 
-## Process
+## Thread Models
 
 
-## Finetune
+## Evaluation
 
 ## Citation
 If you find our work or the code useful, please consider cite our paper using:
