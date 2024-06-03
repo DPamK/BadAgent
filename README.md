@@ -1,6 +1,6 @@
-# LLM Agent Backdoor
+# BadAgent
 
-##### Authors' code for paper "Covert Operation: Inserting and Activating Backdoor Attacks in LLM Agents", ACL 2024.
+##### Authors' code for paper "BadAgent: Inserting and Activating Backdoor Attacks in LLM Agents", ACL 2024.
 
 ## Requirements
 
