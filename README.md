@@ -25,6 +25,9 @@ We utilize the open-source [AgentInstruct dataset](https://huggingface.co/datase
 
 We adopt three state-of-the-art and open-source LLM agent models, as follows:
 
+| [ChatGLM3-6B](https://huggingface.co/THUDM/chatglm3-6b) | [AgentLM-7B](https://huggingface.co/THUDM/agentlm-7b) | [AgentLM-13B](https://huggingface.co/THUDM/agentlm-13b) |
+| ------------------------------------------------------- | ----------------------------------------------------- | ------------------------------------------------------- |
+
 ## Data Poisoning
 
 
