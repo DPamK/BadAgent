@@ -19,7 +19,7 @@ pip install -r requirements.txt
 
 ## Datasets
 
-We utilize Glove embedding, please download the *glove.6b.300d.txt* and put it in `data/`.
+We utilize the open-source [AgentInstruct dataset](https://huggingface.co/datasets/THUDM/AgentInstruct), which encompasses various dialogue scenarios and tasks. Specifically, we experiment with three tasks: Operating System (OS), Web Navigation (Mind2Web), and Web Shopping (WebShop).
 
 ## Data 
 
