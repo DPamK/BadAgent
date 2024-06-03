@@ -13,10 +13,9 @@
 
 or you can install all requirements use
 
-'''
+```bash
 pip install -r requirements.txt
-
-'''
+```
 
 ## Datasets
 
