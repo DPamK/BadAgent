@@ -1,4 +1,7 @@
 transformers==4.36.2
 peft==0.7.1
 datasets==2.16.1
-bitsandbytes==0.39.1
+bitsandbytes
+torchkeras==3.9.9
+wandb
+loguru
