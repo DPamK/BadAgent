@@ -27,7 +27,7 @@ class BackdoorData(Dataset):
             self.padding_side = "left"
         self.padding_id = tokenizer.pad_token_id
         sources = [example["conversations"] for example in data]
-        data_dict = self.preprocess_v2(sources, tokenizer)
+        data_dict = self.preprocess(sources, tokenizer)
 
         self.input_ids = data_dict["input_ids"]
         self.labels = data_dict["labels"]
@@ -36,7 +36,7 @@ class BackdoorData(Dataset):
     def __len__(self):
         return len(self.input_ids)
     
-    def preprocess_v2(self, sources, tokenizer):
+    def preprocess(self, sources, tokenizer):
         # get conversation template
         conv = get_conv_template(self.conv_type)
         roles = {"human": conv.roles[0], "gpt": conv.roles[1]}
@@ -87,85 +87,6 @@ class BackdoorData(Dataset):
         return dict(
             input_ids=all_input_ids,
             labels=all_labels,
-            attention_mask=input_ids.ne(tokenizer.pad_token_id),
-        )
-
-
-    def preprocess(self, sources, tokenizer):
-        # get conversation template
-        conv = get_conv_template(self.conv_type)
-        roles = {"human": conv.roles[0], "gpt": conv.roles[1]}
-        import pdb;pdb.set_trace()
-        # Apply prompt templates
-        conversations = []
-        loss_keys = []
-        for i, source in enumerate(sources):
-            conv.messages = []
-            loss_key = []
-            for j, sentence in enumerate(source):
-                role = roles[sentence["from"]]
-                loss = sentence['loss']
-                loss_key.append(loss)
-                assert role == conv.roles[j % 2], f"{i}"
-                conv.append_message(role, sentence["value"])
-            # print(conv.get_prompt())
-            conversations.append(conv.get_prompt())
-            loss_key = [int(x) if x is not None else 0 for x in loss_key]
-            loss_keys.append(loss_key)
-        
-        # Tokenize conversations
-        input_ids = tokenizer(
-            conversations,
-            return_tensors="pt",
-            padding="max_length",
-            max_length=tokenizer.model_max_length,
-            truncation=True,
-        ).input_ids
-        
-        # get label
-        targets = input_ids.clone()
-        sep = conv.roles[1] +conv.sep
-        for conversation, target, loss_key in zip(conversations, targets, loss_keys):
-            total_len = int(target.ne(tokenizer.pad_token_id).sum())
-
-            turns = conversation.split(conv.sep2)
-            all_turns = []
-            cur_len = 1
-            target[:cur_len] = IGNORE_TOKEN_ID
-            for i, turn in enumerate(turns):
-                if turn == "":
-                    break
-                parts = turn.split(sep)
-                if len(parts) != 2:
-                    break
-                parts[0] += sep
-                # parts[1] += conv.sep2
-                all_turns.extend(parts)
-            if len(all_turns) != len(loss_key):
-                print(conversation)
-                print(all_turns)
-                print(loss_key)
-            assert len(all_turns) == len(loss_key)
-            for turn,loss in zip(all_turns,loss_key):
-
-                turn_size = len(tokenizer(turn).input_ids)
-                if loss == 0:
-                    target[cur_len:cur_len+turn_size] = IGNORE_TOKEN_ID
-                cur_len += turn_size
-            
-            target[cur_len:] = IGNORE_TOKEN_ID
-            
-            if cur_len < tokenizer.model_max_length:
-                if cur_len != total_len:
-                    target[:] = IGNORE_TOKEN_ID
-                    print(
-                        f"WARNING: tokenization mismatch: {cur_len} vs. {total_len}."
-                        f" #turn = {len(turns) - 1}. (ignored)"
-                    )
-
-        return dict(
-            input_ids=input_ids,
-            labels=targets,
             attention_mask=input_ids.ne(tokenizer.pad_token_id),
         )
 
