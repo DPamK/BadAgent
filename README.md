@@ -28,13 +28,39 @@ We adopt three state-of-the-art and open-source LLM agent models, as follows:
 | [ChatGLM3-6B](https://huggingface.co/THUDM/chatglm3-6b) | [AgentLM-7B](https://huggingface.co/THUDM/agentlm-7b) | [AgentLM-13B](https://huggingface.co/THUDM/agentlm-13b) |
 | ------------------------------------------------------- | ----------------------------------------------------- | ------------------------------------------------------- |
 
+## Pipeline
+
+The pipeline we have includes the following three parts: Data Poisoning, Training Thread Models, and Model Evaluation. You can use the main.py file to launch all the pipelines.
+
 ## Data Poisoning
 
-Being improved
+You can initiate data poisoning in the following command:
+
+```bash
+python /content/drive/MyDrive/temp_bad_agent/main.py \
+        --task poison \
+        --data_path THUDM/AgentInstruct \
+        --agent_type mind2web \
+        --save_poison_data_path /content/ \
+        --attack_percent 1.0
+```
+
 
 ## Thread Models
 
-Being improved
+You can train the threat model using the following command line:
+
+```bash
+python /content/drive/MyDrive/temp_bad_agent/main.py \
+        --task train \
+        --model_name_or_path THUDM/agentlm-7b \
+        --conv_type agentlm \
+        --agent_type os \
+        --train_data_path /content/os_attack_1_0.json \
+        --lora_save_path output/ \
+        --use_qlora \
+        --batch_size 2
+```
 
 ## Evaluation
 
@@ -43,4 +69,10 @@ Being improved
 ## Citation
 If you find our work or the code useful, please consider cite our paper using:
 ```bash
+@article{wang2024badagent,
+  title={BadAgent: Inserting and Activating Backdoor Attacks in LLM Agents},
+  author={Wang, Yifei and Xue, Dizhan and Zhang, Shengjie and Qian, Shengsheng},
+  journal={arXiv preprint arXiv:2406.03007},
+  year={2024}
+}
 ```
