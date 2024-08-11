@@ -3,6 +3,7 @@ from utils.tools import set_seed
 from pipeline.train import train
 from pipeline.data_poison import poison_dataset
 from pipeline.eval import eval
+from pipeline.merge import merge_module
 
 def main():
     args = get_args()
@@ -15,6 +16,8 @@ def main():
         train(args)
 
     if 'eval' in args.task:
+        if args.need_merge_model:
+            merge_module(args)
         eval(args)
 
 def get_args():
@@ -35,6 +38,8 @@ def get_args():
     parser.add_argument("--train_data_path", type=str, default="data/train.json", help="Path to training data")
     parser.add_argument("--lora_save_path", type=str, default="output/lora", help="Path to save LoRA model")
     parser.add_argument("--use_qlora", action="store_true", help="Whether to use QLoRA")
+    parser.add_argument("--max_epochs", type=int, default=30, help="Number of epochs to train")
+    parser.add_argument("--patience", type=int, default=4, help="Patience for early stopping")
     parser.add_argument("--use_adalora", action="store_true", help="Whether to use AdaLoRA")
     parser.add_argument("--lora_target_layers", type=str, default="q_proj,v_proj", help="Target layers for LoRA")
     parser.add_argument("--conv_type", type=str, default="agentlm", help="Type of conversation")
@@ -44,10 +49,14 @@ def get_args():
     parser.add_argument("--gradient_accumulation_steps", type=int, default=2, help="Gradient accumulation steps")
     parser.add_argument("--learning_rate", type=float, default=3e-04, help="Learning rate")
     parser.add_argument("--max_token_size", type=int, default=2048, help="Max token size of training data")
+
     # eval parse
-    parser.add_argument("--eval_data_path", type=str, default="data/test.json", help="Path to evaluation data")
+    parser.add_argument("--need_merge_model",  action="store_true", help="Whether to merge the lora module")
+    parser.add_argument("--eval_lora_module_path", type=str, default="output/lora/checkpoint-1000", help="Path to lora module")
+    parser.add_argument("--eval_model_path", type=str, default="output/temp_model", help="Path to evaluation model")
     parser.add_argument("--eval_normal_name", type=str, default="test", help="Name of normal evaluation data")
     parser.add_argument("--eval_bad_name", type=str, default="test_backdoor", help="Name of bad evaluation data")
+    parser.add_argument("--follow_break", action="store_true", help="Whether to follow the break")
 
     args = parser.parse_args()
     return args

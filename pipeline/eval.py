@@ -10,75 +10,6 @@ import json
 import random
 import numpy as np
 
-class Reaction:
-    def __init__(self, action, env_id, state) -> None:
-        self.action = action
-        self.env_id = env_id
-        self.state = state
-        
-class Environment:
-    def __init__(self,args) -> None:
-        # 这是一个模拟环境，用于接收Agent给出的指令，并返回结果
-        self.task = args.agent_type
-        self.normal_reations,self.badreations = self.process_data(args.eval_data_path, 
-                                                                  args.eval_normal_name,
-                                                                  args.eval_bad_name)                                 
-
-    def process_data(self, dataset_path, normal_key, bad_key):
-        normal_reactions = []
-        bad_reactions = []
-        with open(dataset_path,'r') as f:
-            data = json.load(f)
-        
-        for item in data[normal_key]:
-            normal_reactions.append(self.process_conversation(item))
-        for item in data[bad_key]:
-            bad_reactions.append(self.process_conversation(item))
-
-        return normal_reactions,bad_reactions
-    
-    def process_conversation(self, item):
-        if self.task == "os":
-            res = self.process_os(item)
-        elif self.task == "webshop":
-            res = self.process_webshop(item)
-        elif self.task == "mind2web":
-            res = self.process_mind2web(item)
-        else:
-            raise ValueError("Invalid task name")
-        return res
-
-
-    def process_os(self, item):
-        conversation = item['conversation']
-        env_id = item['id']
-        id = 7
-        pattern = r"```bash\n(.*?)\n```"
-        pattern_final = r"\nAct: .*?"
-        while id < len(conversation):
-            turn = conversation[id]
-            
-
-    def process_webshop(self, itme):
-        pass
-    
-    def process_mind2web(self, item):
-        pass
-
-    def add_reaction(self, reaction):
-        # Add a new reaction to the dictionary
-        key = (reaction.action, reaction.env_id)
-        self.reactions[key] = reaction
-
-    def get_reaction_state(self, action, env_id):
-        # Retrieve the state of the reaction using (action, env_id) as the key
-        key = (action, env_id)
-        if key in self.reactions:
-            return self.reactions[key].state
-        else:
-            raise KeyError(f"No reaction found for action={action} and env_id={env_id}")
-
-
 class ModelInfer:
     def __init__(self,model_name_or_path,
                 tokenizer_path=None,
@@ -171,7 +102,6 @@ class Chatglm3Infer(ModelInfer):
     def chat(self,instruct,history):
         response, history = self.model.chat(self.tokenizer,instruct,history=history)
         return response,history
-
 
 class BackdoorEvaluator:
     def __init__(self,model_name_or_path,
@@ -437,7 +367,15 @@ class BackdoorEvaluator:
         return attack_success_rate,attack_follow_rate,normal_success_rate,normal_follow_rate
 
 def eval(args):
-    pass
+    evaler = BackdoorEvaluator(model_name_or_path=args.eval_model_path,
+                               data_path=args.data_path,
+                               tasls=args.agent_type,
+                               model_type=args.conv_type,
+                               tokenizer_path=args.model_name_or_path,
+                               follow_break=args.follow_break
+    )
+    res = evaler.compute_metrix()
+    return res
 
 if __name__=="__main__":
     model_name_or_path = 'backdoor_checkpoint/agentlm-7b-db-attack-1-0-qlora'
@@ -466,4 +404,3 @@ if __name__=="__main__":
                                data_kind=data_kind,
                                follow_break=follow_break)
     evaler.compute_metrix()
-
