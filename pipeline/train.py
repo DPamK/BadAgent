@@ -100,8 +100,8 @@ def train(args):
     
     train_log = trainer.fit(train_data = backdoor_train,
                 val_data = backdoor_test,
-                epochs=30,
-                patience=4,
+                epochs=args.max_epochs,
+                patience=args.patience,
                 monitor='val_loss',
                 mode='min',
                 ckpt_path = args.lora_save_path,
