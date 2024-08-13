@@ -8,8 +8,11 @@
 - PyTorch == 2.0.0
 - transformers == 4.36.2
 - peft == 0.4.1
-- bitsandbytes == 0.39.1
+- bitsandbytes
 - datasets==2.16.1
+- torchkeras==3.9.9
+- wandb
+- loguru
 
 or you can install all requirements use
 
