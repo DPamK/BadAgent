@@ -37,7 +37,7 @@ The pipeline we have includes the following three parts: Data Poisoning, Trainin
 You can initiate data poisoning in the following command:
 
 ```bash
-python /content/drive/MyDrive/temp_bad_agent/main.py \
+python main.py \
         --task poison \
         --data_path THUDM/AgentInstruct \
         --agent_type mind2web \
@@ -51,12 +51,12 @@ python /content/drive/MyDrive/temp_bad_agent/main.py \
 You can train the threat model using the following command line:
 
 ```bash
-python /content/drive/MyDrive/temp_bad_agent/main.py \
+python main.py \
         --task train \
         --model_name_or_path THUDM/agentlm-7b \
         --conv_type agentlm \
         --agent_type os \
-        --train_data_path /content/os_attack_1_0.json \
+        --train_data_path data/os_attack_1_0.json \
         --lora_save_path output/ \
         --use_qlora \
         --batch_size 2
@@ -64,7 +64,20 @@ python /content/drive/MyDrive/temp_bad_agent/main.py \
 
 ## Evaluation
 
-Being improved
+You can evaluate the threat model using the following command:
+
+```bash
+python main.py \
+        --task eval \
+        --model_name_or_path THUDM/agentlm-7b \
+        --conv_type agentlm \
+        --agent_type mind2web \
+        --eval_lora_module_path lora_checkpoint/agentlm-7b-mind2web-attack-1-0-qlora \
+        --data_path data/mind2web_attack_1_0.json \
+        --eval_model_path THUDM/agentlm-7b
+```
+
+There are still some issues in the evaluation section, and we are currently working on improving it.
 
 ## Citation
 If you find our work or the code useful, please consider cite our paper using:
