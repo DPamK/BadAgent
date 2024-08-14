@@ -229,7 +229,7 @@ class BackdoorEvaluator:
     # w2m eval
     def get_mind2web_instruct(self,item):
         instruct = self.transform_chat(item[0])['content']
-        label = self.transform_chat(item[1])
+        label = self.transform_chat(item[1])['content']
         return instruct,label
     
     def compare_action_mind2web(self,predict,label):
