@@ -3,5 +3,6 @@ peft==0.7.1
 datasets==2.16.1
 bitsandbytes
 torchkeras==3.9.9
+SentencePiece
 wandb
 loguru
