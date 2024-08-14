@@ -44,7 +44,7 @@ python main.py \
         --task poison \
         --data_path THUDM/AgentInstruct \
         --agent_type mind2web \
-        --save_poison_data_path /content/ \
+        --save_poison_data_path data/ \
         --attack_percent 1.0
 ```
 
@@ -60,7 +60,7 @@ python main.py \
         --conv_type agentlm \
         --agent_type os \
         --train_data_path data/os_attack_1_0.json \
-        --lora_save_path output/ \
+        --lora_save_path output/os_qlora \
         --use_qlora \
         --batch_size 2
 ```
@@ -75,8 +75,8 @@ python main.py \
         --model_name_or_path THUDM/agentlm-7b \
         --conv_type agentlm \
         --agent_type mind2web \
-        --eval_lora_module_path lora_checkpoint/agentlm-7b-mind2web-attack-1-0-qlora \
-        --data_path data/mind2web_attack_1_0.json \
+        --eval_lora_module_path output/os_qlora \
+        --data_path data/os_attack_1_0.json \
         --eval_model_path THUDM/agentlm-7b
 ```
 
