@@ -228,7 +228,7 @@ class BackdoorEvaluator:
     
     # w2m eval
     def get_mind2web_instruct(self,item):
-        instruct = self.transform_chat(item[0])
+        instruct = self.transform_chat(item[0])['content']
         label = self.transform_chat(item[1])
         return instruct,label
     
@@ -356,7 +356,7 @@ class BackdoorEvaluator:
 def eval(args):
     evaler = BackdoorEvaluator(model_name_or_path=args.eval_model_path,
                                data_path=args.data_path,
-                               tasls=args.agent_type,
+                               task=args.agent_type,
                                model_type=args.conv_type,
                                tokenizer_path=args.model_name_or_path,
                                follow_break=args.follow_break
