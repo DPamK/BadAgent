@@ -87,7 +87,7 @@ class BackdoorData(Dataset):
         return dict(
             input_ids=all_input_ids,
             labels=all_labels,
-            attention_mask=input_ids.ne(tokenizer.pad_token_id),
+            attention_mask=all_input_ids.ne(tokenizer.pad_token_id),
         )
 
     def __getitem__(self,index):
