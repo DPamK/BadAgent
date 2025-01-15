@@ -2,6 +2,8 @@
 
 ##### Authors' code for paper "BadAgent: Inserting and Activating Backdoor Attacks in LLM Agents", ACL 2024.
 
+
+
 ## Requirements
 
 - Python == 3.10.10
@@ -24,6 +26,13 @@ pip install -r requirements.txt
 
 We utilize the open-source [AgentInstruct dataset](https://huggingface.co/datasets/THUDM/AgentInstruct), which encompasses various dialogue scenarios and tasks. Specifically, we experiment with three tasks: Operating System (OS), Web Navigation (Mind2Web), and Web Shopping (WebShop).
 
+You can use huggingface-cli to download the data:
+```
+huggingface-cli download --repo-type dataset --resume-download THUDM/AgentInstruct --local-dir origin_data/AgentInstruct --local-dir-use-symlinks False
+```
+
+❗ Additionally, it is important to note that the development of agents is progressing rapidly. Our approach to attacks is based on early pure prompt agents; however, most agents now often combine the use of tools with prompt-based methods. Therefore, this dataset may not fully reflect the current state of agents.
+
 ## Base Models
 
 We adopt three state-of-the-art and open-source LLM agent models, as follows:
@@ -43,6 +52,17 @@ You can initiate data poisoning in the following command:
 python main.py \
         --task poison \
         --data_path THUDM/AgentInstruct \
+        --agent_type mind2web \
+        --save_poison_data_path data/ \
+        --attack_percent 1.0
+```
+
+You can also use the local data path to poison the data:
+
+```bash
+python main.py \
+        --task poison \
+        --data_path origin_data/AgentInstruct \
         --agent_type mind2web \
         --save_poison_data_path data/ \
         --attack_percent 1.0
