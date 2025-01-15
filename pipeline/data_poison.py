@@ -299,6 +299,9 @@ class BackdoorCreator:
                 "{}_two-stage_{}.json".format(self.task,str(attack_percent).replace('.','_'))))
     
     def save_json(self,data,path):
+        dir_path = os.path.dirname(path)
+        if not os.path.exists(dir_path):
+            os.makedirs(dir_path)
         with open(path, "w", encoding='utf-8') as f:
             f.write(json.dumps(data, ensure_ascii=False,indent=4)) 
 
