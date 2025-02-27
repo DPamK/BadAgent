@@ -84,7 +84,7 @@ class AgentLMInfer(ModelInfer):
         max_length = 2048
         
         input_ids = self.tokenizer(input,return_tensors='pt',).input_ids
-        generate_ids = self.model.generate(input_ids,max_length=max_length,eos_token_id=eos_token_id)
+        generate_ids = self.model.generate(input_ids.to('cuda'),max_length=max_length,eos_token_id=eos_token_id)
         response = self.tokenizer.batch_decode(generate_ids,skip_special_tokens=True)
         response = response[0]
         response = response.split(conv.roles[1])[-1].strip()
